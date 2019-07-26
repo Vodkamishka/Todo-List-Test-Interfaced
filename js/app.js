@@ -51,15 +51,28 @@ function render() {
     })
     let str = items.join("");
     list.innerHTML = str;
+
+    let texts = document.getElementsByClassName("text");
+    for (let i=0; i < texts.length; i ++){
+        texts[i].addEventListener("click", function () {
+            texts[i].classList.toggle('lineThrough');
+        })
+    }
+   
     let trashes = document.getElementsByClassName("fa-trash-o");
     for (let i=0; i < trashes.length; i++){
         trashes[i].addEventListener("click", function(event) {
             let element = event.target;
-            let key = element.attributes.key;
+            let key = element.attributes.key.value;
+            var fireRef = firebase.database().ref(`todos/${key}`);
+            fireRef.remove()
+            .then(() => {
+                console.log("remove")
+            })
+            .catch(() => {
+                console.log("remove failed")
+            })
             
-            
-          firebase.database().ref('todos/key').remove();
-          console.log(database.ref('todos'))
         })
     }
 }
